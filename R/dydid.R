@@ -18,22 +18,24 @@
 #' C. "plot": A dynamic plot of DiD coefficients using ggplot2().
 #' @examples
 #'
-#'# load in your data
-#' df <- read.dta13('data/big bad banks.dta')
+#' # load in your data
+#' df <- read.dta13("data/big bad banks.dta")
 #'
-#'# use the function
-#' bbb.did <- dydid(data = df,dv = 'y',tpoint = 'reform_timepoint', step = 1,
-#' eid = 'state_id',tid = 'year_id',
-#' span = c(-7,7), covar = NULL))
+#' # use the function
+#' bbb.did <- dydid(
+#'   data = df, dv = "y", tpoint = "reform_timepoint", step = 1,
+#'   eid = "state_id", tid = "year_id",
+#'   span = c(-7, 7), covar = NULL
+#' )
 #'
-#'# see the origigal regression results
-#'bbb.did$regs
+#' # see the origigal regression results
+#' bbb.did$regs
 #'
-#'# see the organized table for coefficients and 95% CIs
-#'bbb.did$results
+#' # see the organized table for coefficients and 95% CIs
+#' bbb.did$results
 #'
-#'# see the dynamic plot of DiD results
-#'bbb.did$plot
+#' # see the dynamic plot of DiD results
+#' bbb.did$plot
 #'
 #' @export
 #' @import ggplot2
@@ -43,70 +45,63 @@
 
 # Prepare -----------------------------------------------------------------
 
-# ## packages
-# library(tidyverse)
-# library(readstata13)
-# library(lfe)
-# library(fastDummies)
-
-# rm(list = ls())
-
-## load big bad banks data
-# df <- read.dta13('big bad banks.dta')
-# df <- df %>% mutate(y = log(gini))
-
 
 # dydid: Function for Dynamic DiD Regression and Plot-------------------------------------------------------------
 
 
-dydid <- function(data = df,dv = 'y',
-                        tpoint = 'reform_timepoint', step = 1,
-                        eid = 'state_id',tid = 'year_id',span = c(-5,5), covar = NULL) {
+dydid <- function(data = df, dv = "y",
+                  tpoint = "reform_timepoint", step = 1,
+                  eid = "state_id", tid = "year_id", span = c(-5, 5), covar = NULL) {
 
   # Set Treatment-Post -------------------------------------------
   df <- data
 
-  df$relative <- df[,tid] -  df[,tpoint]
+  df$relative <- df[, tid] - df[, tpoint]
   df <- df %>%
     mutate(post = relative / step) %>%
     mutate(pre = -relative / step)
 
-  varnum  = span[2] - span[1]
+  varnum <- span[2] - span[1]
 
-  df$post <- ifelse(df$post >= span[2],span[2], df$post)
-  df$post <- ifelse(df$post < 0,-1, df$post)
-  df$pre <- ifelse(df$pre >= -span[1],-span[1], df$pre)
-  df$pre <- ifelse(df$pre < 0,-1, df$pre)
+  df$post <- ifelse(df$post >= span[2], span[2], df$post)
+  df$post <- ifelse(df$post < 0, -1, df$post)
+  df$pre <- ifelse(df$pre >= -span[1], -span[1], df$pre)
+  df$pre <- ifelse(df$pre < 0, -1, df$pre)
 
 
-  df <- fastDummies::dummy_cols(df, select_columns = 'post')
-  df <- fastDummies::dummy_cols(df, select_columns = 'pre')
+  df <- fastDummies::dummy_cols(df, select_columns = "post")
+  df <- fastDummies::dummy_cols(df, select_columns = "pre")
 
-  pre_list <- paste0('pre_',-span[1]:2)
-  post_list <- paste0('post_',0:span[2])
+  pre_list <- paste0("pre_", -span[1]:2)
+  post_list <- paste0("post_", 0:span[2])
   d_list <- c(pre_list, post_list)
 
   ## For observations without treatment, set all Dit indicators as 0
-  for (i in d_list){
-    df[is.na(df[,tpoint]) == 1,i] <- 0
+  for (i in d_list) {
+    df[is.na(df[, tpoint]) == 1, i] <- 0
   }
 
-  results <- rbind(data.frame(var = pre_list,  time = span[1]:-2, position = 1:(0-span[1]-1)      ),
-                   data.frame(var = post_list, time = 0:span[2], position = -span[1]:varnum  )   )
+  results <- rbind(
+    data.frame(var = pre_list, time = span[1]:-2, position = 1:(0 - span[1] - 1)),
+    data.frame(var = post_list, time = 0:span[2], position = -span[1]:varnum)
+  )
 
 
   # DiD Regression ----------------------------------------------------------
 
-  covar <- ifelse(is.null(covar)," ", paste('+', paste(covar, collapse = ' + '))) # set formula part for covars
+  covar <- ifelse(is.null(covar), " ", paste("+", paste(covar, collapse = " + "))) # set formula part for covars
 
   model <- as.formula(
-    paste(dv, '~', paste(pre_list,collapse = "+"), # remember to EXCLUDE pre_1
-          '+' , paste(post_list,collapse = "+"),  # remember to INCLUDE post_0
-          covar,
-          '|', eid, '+', tid,
-          '| 0 |',eid)) # FE & Cluster SE
+    paste(
+      dv, "~", paste(pre_list, collapse = "+"), # remember to EXCLUDE pre_1
+      "+", paste(post_list, collapse = "+"), # remember to INCLUDE post_0
+      covar,
+      "|", eid, "+", tid,
+      "| 0 |", eid
+    )
+  ) # FE & Cluster SE
 
-  rm(post_list,pre_list)
+  rm(post_list, pre_list)
 
   did <- felm(model, data = df)
 
@@ -123,34 +118,35 @@ dydid <- function(data = df,dv = 'y',
   ## use loop to get stats for all indicators
   stats <- data.frame()
   for (i in 1:varnum) {
-    stat <-  get.stats(i,results[results$position == i,'var'])
-    stats <- rbind(stats,stat)
+    stat <- get.stats(i, results[results$position == i, "var"])
+    stats <- rbind(stats, stat)
   }
 
   ## combine variable lists and stats
-  results <- left_join(results, stats,by = 'var')
+  results <- left_join(results, stats, by = "var")
   rm(stats)
 
   # DiD Ploting Function-------------------------------------------------------------
 
   ## Recommended: CI as shade area
-  did.plot <- function(results){
+  did.plot <- function(results) {
     did_plot <- ggplot(data = results, aes(x = time, y = coef, ymax = ciup, ymin = cilow)) +
-      geom_hline(yintercept = 0,linetype = 2, size = 0.6, alpha = 0.5) +  # reference for effect
-      geom_vline(xintercept = -1,linetype = 2, size = 0.6, alpha = 0.5) +  # reference for post-treatment
-      geom_ribbon(fill = 'deepskyblue3', alpha = 0.15) + # shaded area for 95% CIs
-      geom_line(color = 'navyblue',alpha = 0.75) + # line and points for coefficients
-      geom_point(aes(size = abs(coef)), color = 'navyblue')+
+      geom_hline(yintercept = 0, linetype = 2, size = 0.6, alpha = 0.5) + # reference for effect
+      geom_vline(xintercept = -1, linetype = 2, size = 0.6, alpha = 0.5) + # reference for post-treatment
+      geom_ribbon(fill = "deepskyblue3", alpha = 0.15) + # shaded area for 95% CIs
+      geom_line(color = "navyblue", alpha = 0.75) + # line and points for coefficients
+      geom_point(aes(size = abs(coef)), color = "navyblue") +
       theme_bw() +
-      xlab('Periods relative to Treatment') +
-      ylab('Estimate of Treatment Effect') +
+      xlab("Periods relative to Treatment") +
+      ylab("Estimate of Treatment Effect") +
       scale_x_continuous(breaks = span[1]:span[2]) +
-      theme(panel.grid.minor.x = element_blank(),
-            legend.position = 'none')
+      theme(
+        panel.grid.minor.x = element_blank(),
+        legend.position = "none"
+      )
     return(did_plot)
   }
 
   # Plot and Return Results
-  return(list('plot' = did.plot(results),'results' = results, 'regs' = did))
+  return(list("plot" = did.plot(results), "results" = results, "regs" = did))
 }
-
