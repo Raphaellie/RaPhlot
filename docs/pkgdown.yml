@@ -5,7 +5,7 @@ pkgdown_sha: ~
 url: https://raphaellie.github.io/raphlot/
 
 development:
-  mode: auto
+  mode: release
 
 articles:
   RaPhlot-Vignette: RaPhlot-Vignette.html
