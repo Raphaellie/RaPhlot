@@ -4,6 +4,9 @@ pkgdown_sha: ~
 
 url: https://raphaellie.github.io/raphlot/
 
+development:
+  mode: auto
+
 articles:
   RaPhlot-Vignette: RaPhlot-Vignette.html
 last_built: 2022-07-01T16:31Z
