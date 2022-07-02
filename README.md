@@ -1,3 +1,5 @@
 # RaPhlot
 
-HAHAHAHAHAHAHA!
+## Purpose and Contribution
+
+

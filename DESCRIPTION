@@ -2,8 +2,7 @@ Package: RaPhlot
 Type: Package
 Title: Coefficient Plotting for Political Science Research
 Version: 0.1.0
-Author: Chaoyue Wang
-Maintainer: Chaoyue Wang <chyrwang@gmail.com>
+Authors@R: c(person("Chaoyue","Wang",role = c("aut", "cre", "cph"),email = "chyrwang@gmail.com"))
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: What license is it under?

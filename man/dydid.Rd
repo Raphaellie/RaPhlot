@@ -44,12 +44,14 @@ Set specifications for dynamic Difference-in-Differences analysis, report coeffi
 \examples{
 
 # load in your data
-df <- read.dta13('data/big bad banks.dta')
+df <- read.dta13("data/big bad banks.dta")
 
 # use the function
-bbb.did <- dydid(data = df,dv = 'y',tpoint = 'reform_timepoint', step = 1,
-eid = 'state_id',tid = 'year_id',
-span = c(-7,7), covar = NULL))
+bbb.did <- dydid(
+  data = df, dv = "y", tpoint = "reform_timepoint", step = 1,
+  eid = "state_id", tid = "year_id",
+  span = c(-7, 7), covar = NULL
+)
 
 # see the origigal regression results
 bbb.did$regs
