@@ -32,13 +32,14 @@
 #' anes.dynamic$plot
 #'
 #' @export
-#' @import tidyverse
+#' @import ggplot2
+#' @import dplyr
 #' @import lfe
 
 
 ## FUNCTION for coefficient trends
 dycoef <- function(data,dv = 'pid7',x = 'ft_black',covar = NULL,tid,
-                   years = seq(min(anes[[tid]]),max(anes[[tid]]),1)) {
+                   years = seq(min(data[[tid]]),max(data[[tid]]),1)) {
 
   # check var availability across time ---------------------------------
 

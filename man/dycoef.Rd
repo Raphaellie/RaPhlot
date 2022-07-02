@@ -10,7 +10,7 @@ dycoef(
   x = "ft_black",
   covar = NULL,
   tid,
-  years = seq(min(anes[[tid]]), max(anes[[tid]]), 1)
+  years = seq(min(data[[tid]]), max(data[[tid]]), 1)
 )
 }
 \arguments{
