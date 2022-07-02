@@ -125,4 +125,3 @@ dycoef <- function(data,dv = 'pid7',x = 'ft_black',covar = NULL,tid,
 
   return(list('plot' = dycoef.ribbon(stats), 'results' = stats,'lastreg' = summary(reg)))
 }
-

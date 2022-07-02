@@ -20,7 +20,7 @@ dycoef(
 
 \item{x}{the explaining variable of your interest, should be available across several time periods}
 
-\item{covar}{controls variables to be included}
+\item{covar}{control variables to be included}
 
 \item{tid}{ID for each time point}
 
@@ -43,8 +43,8 @@ anes <- read.dta13("data/ANES cleaned.dta")
 # use the function
 anes.dynamic <- dycoef(
   data = anes, dv = "pid7", x = 'ft_black', tid = "year",
-  years = seq(1960,2020,4) ,
-  covar = ('ft_white', 'as.factor(race)')
+  years = seq(1960,2020,4),
+  covar = ('ft_white','as.factor(race)')
 )
 
 # see the organized table for coefficients and 95\% CIs

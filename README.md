@@ -1,5 +1,0 @@
-# RaPhlot
-
-## Purpose and Contribution
-
-
