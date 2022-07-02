@@ -32,9 +32,9 @@
 #' anes.dynamic$plot
 #'
 #' @export
-#' @import ggplot2
-#' @import dplyr
+#' @import tidyverse
 #' @import lfe
+#' @import fastDummies
 
 
 ## FUNCTION for coefficient trends

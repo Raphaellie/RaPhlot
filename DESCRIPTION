@@ -18,3 +18,4 @@ VignetteBuilder: knitr
 URL: https://github.com/Raphaellie/RaPhlot,
     https://raphaellie.github.io/RaPhlot/
 BugReports: https://github.com/Raphaellie/RaPhlot/issues
+Depdends: tidyverse,lfe,fastDummies
