@@ -16,5 +16,6 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 VignetteBuilder: knitr
-URL: https://github.com/Raphaellie/RaPhlot
+URL: https://github.com/Raphaellie/RaPhlot,
+    https://raphaellie.github.io/RaPhlot/
 BugReports: https://github.com/Raphaellie/RaPhlot/issues
