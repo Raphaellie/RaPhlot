@@ -19,6 +19,6 @@ URL: https://github.com/Raphaellie/RaPhlot,
     https://raphaellie.github.io/RaPhlot/
 BugReports: https://github.com/Raphaellie/RaPhlot/issues
 Imports: 
-    tidyverse
-    lfe
+    tidyverse,
+    lfe,
     fastDummies
