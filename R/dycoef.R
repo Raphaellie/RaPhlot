@@ -112,18 +112,18 @@ dycoef <- function(data,dv = 'pid7',x = 'ft_black',covar = NULL,tid,
     return(plot)
   }
 
-  dycoef.lrange <- function(results) {
-    plot <- ggplot(data = results, aes(x = time, y = coef, ymax = ciup, ymin = cilow)) + # geom_vline(xintercept = 2000,linetype = 2, size = 0.6, alpha = 0.5) +  # reference for any year
-      geom_hline(yintercept = 0,linetype = 2, size = 0.6, alpha = 0.5) +  # reference for effect
-      geom_linerange(color = 'slategray4', alpha = 0.50, size = 1.6) + # shaded area for 95% CIs
-      geom_point(color = 'black', alpha = 0.9 ,size = 3)+ # aes(size = abs(coef)
-      theme_bw() +
-      xlab('Year of Survey') +
-      ylab('Estimated Effect') + # scale_x_continuous(breaks = span[1]:span[2]) +
-      theme(plot.title = element_text(face = 'bold',size = 12),
-            legend.position = 'none')
-    return(plot)
-  }
+  # dycoef.lrange <- function(results) {
+  #   plot <- ggplot(data = results, aes(x = time, y = coef, ymax = ciup, ymin = cilow)) + # geom_vline(xintercept = 2000,linetype = 2, size = 0.6, alpha = 0.5) +  # reference for any year
+  #     geom_hline(yintercept = 0,linetype = 2, size = 0.6, alpha = 0.5) +  # reference for effect
+  #     geom_linerange(color = 'slategray4', alpha = 0.50, size = 1.6) + # shaded area for 95% CIs
+  #     geom_point(color = 'black', alpha = 0.9 ,size = 3)+ # aes(size = abs(coef)
+  #     theme_bw() +
+  #     xlab('Year of Survey') +
+  #     ylab('Estimated Effect') + # scale_x_continuous(breaks = span[1]:span[2]) +
+  #     theme(plot.title = element_text(face = 'bold',size = 12),
+  #           legend.position = 'none')
+  #   return(plot)
+  # }
 
   return(list('plot' = dycoef.ribbon(stats), 'results' = stats,'lastreg' = summary(reg)))
 }
