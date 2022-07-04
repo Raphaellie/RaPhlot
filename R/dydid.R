@@ -51,7 +51,7 @@
 dydid <- function(data = df, dv = "y",
                   tpoint = "reform_timepoint", step = 1,
                   eid = "state_id", tid = "year_id", span = c(-5, 5), covar = NULL,
-                  linetype = 6, size = 3) {
+                  linetype = 6,size = 3) {
 
   # Set Treatment-Post -------------------------------------------
   df <- data
