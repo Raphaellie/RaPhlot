@@ -40,7 +40,7 @@
 ## FUNCTION for coefficient trends
 dycoef <- function(data,dv = 'pid7',x = 'ft_black',covar = NULL,tid,
                    years = seq(min(data[[tid]]),max(data[[tid]]),1),
-                   linetype = 6, size = 3) {
+                   linetype = 6, size = 3){
 
   # check var availability across time ---------------------------------
 
