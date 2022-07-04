@@ -108,7 +108,9 @@ dycoef <- function(data,dv = 'pid7',x = 'ft_black',covar = NULL,tid,
       scale_x_continuous(breaks = years) +
       theme(plot.title = element_text(face = 'bold',size = 12),
             legend.position = 'none',
-            panel.grid.minor.x = element_blank())
+            panel.grid.minor.x = element_blank(),
+            axis.text = element_text(color = 'black'))
+
     return(plot)
   }
 

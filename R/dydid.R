@@ -140,9 +140,9 @@ dydid <- function(data = df, dv = "y",
       xlab("Periods relative to Treatment") +
       ylab("Estimate of Treatment Effect") +
       scale_x_continuous(breaks = span[1]:span[2]) +
-      theme(
-        panel.grid.minor.x = element_blank(),
-        legend.position = "none"
+      theme(panel.grid.minor.x = element_blank(),
+            legend.position = "none",
+            axis.text = element_text(color = 'black')
       )
     return(did_plot)
   }
