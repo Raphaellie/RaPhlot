@@ -40,7 +40,7 @@
 ## FUNCTION for coefficient trends
 dycoef <- function(data,dv = 'pid7',x = 'ft_black',covar = NULL,tid,
                    years = seq(min(data[[tid]]),max(data[[tid]]),1),
-                   linetype = 6) {
+                   linetype = 6, size = 3) {
 
   # check var availability across time ---------------------------------
 
@@ -101,7 +101,7 @@ dycoef <- function(data,dv = 'pid7',x = 'ft_black',covar = NULL,tid,
       geom_hline(yintercept = 0,linetype = 2, size = 0.6, alpha = 0.5) +  # reference for effect
       geom_ribbon(linetype = 2, fill = 'deepskyblue4' , alpha = 0.15) + # shaded area for 95% CIs
       geom_line(color = 'navyblue', linetype = linetype, alpha = 0.85) + # line and points for coefficients
-      geom_point(color = 'navyblue' ,size = 3)+ # aes(size = abs(coef)
+      geom_point(color = 'navyblue' ,size = size)+ # aes(size = abs(coef)
       theme_bw() +
       xlab('Year of Survey') +
       ylab('Point Estimate with 95% CIs') +
