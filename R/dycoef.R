@@ -88,7 +88,7 @@ dycoef <- function(data,dv = 'pid7',x = 'ft_black',covar = NULL,tid,
   stats <- data.frame()
 
   for (i in years) {
-    datareg <-data %>% mutate(get(tid) == i)
+    datareg <-data %>% filter(get(tid) == i)
     reg <- felm(model, data = datareg)
     stats <- rbind(stats,get.stats(2,x,reg,i))
     print(paste(i, '-- Regression Done'))
