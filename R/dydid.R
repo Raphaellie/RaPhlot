@@ -147,6 +147,24 @@ dydid <- function(data = df, dv = "y",
     return(did_plot)
   }
 
+  ## CI as error bar
+  did.plot2 <- function(results) {
+    did_plot <- ggplot(data = results, aes(x = time, y = coef, ymax = ciup, ymin = cilow)) +
+      geom_hline(yintercept = 0, linetype = 2, size = 0.6, alpha = 0.5) + # reference for effect
+      geom_vline(xintercept = -1, linetype = 2, size = 0.6, alpha = 0.5) + # reference for post-treatment
+      geom_errorbar(color = "deepskyblue4", alpha = 0.75,width = 0.1) + # shaded area for 95% CIs
+      geom_point( color = "deepskyblue4",size = size) +
+      theme_bw() +
+      xlab("Periods relative to Treatment") +
+      ylab("Estimate of Treatment Effect") +
+      scale_x_continuous(breaks = span[1]:span[2]) +
+      theme(panel.grid.minor.x = element_blank(),
+            legend.position = "none",
+            axis.text = element_text(color = 'black')
+      )
+    return(did_plot)
+  }
+
   # Plot and Return Results
-  return(list("plot" = did.plot(results), "results" = results, "regs" = did))
+  return(list("plot" = did.plot(results),'plot2' = did.plot2(results), "results" = results, "regs" = did))
 }
