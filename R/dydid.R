@@ -152,7 +152,7 @@ dydid <- function(data = df, dv = "y",
     did_plot <- ggplot(data = results, aes(x = time, y = coef, ymax = ciup, ymin = cilow)) +
       geom_hline(yintercept = 0, linetype = 2, size = 0.6, alpha = 0.5) + # reference for effect
       geom_vline(xintercept = -1, linetype = 2, size = 0.6, alpha = 0.5) + # reference for post-treatment
-      geom_linerange(color = "navyblue", alpha = 0.75,size = 2) + # shaded area for 95% CIs
+      geom_linerange(color = "navyblue", alpha = 0.75,size = 1) + # shaded area for 95% CIs
       geom_point( color = "navyblue",size = size) +
       theme_bw() +
       xlab("Periods relative to Treatment") +
