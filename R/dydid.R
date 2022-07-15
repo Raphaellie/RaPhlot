@@ -51,7 +51,7 @@
 dydid <- function(data = df, dv = "y",
                   tpoint = "reform_timepoint", step = 1,
                   eid = "state_id", tid = "year_id", span = c(-5, 5), covar = NULL,
-                  linetype = 5,size = 2.7) {
+                  linetype = 5,size = 2.7,fe2 = NULL) {
 
   # Set Treatment-Post -------------------------------------------
   df <- data
@@ -96,7 +96,7 @@ dydid <- function(data = df, dv = "y",
       dv, "~", paste(pre_list, collapse = "+"), # remember to EXCLUDE pre_1
       "+", paste(post_list, collapse = "+"), # remember to INCLUDE post_0
       covar,
-      "|", eid, "+", tid,
+      "|", eid, "+", tid,fe2,
       "| 0 |", eid
     )
   ) # FE & Cluster SE
@@ -152,7 +152,7 @@ dydid <- function(data = df, dv = "y",
     did_plot <- ggplot(data = results, aes(x = time, y = coef, ymax = ciup, ymin = cilow)) +
       geom_hline(yintercept = 0, linetype = 2, size = 0.6, alpha = 0.5) + # reference for effect
       geom_vline(xintercept = -1, linetype = 2, size = 0.6, alpha = 0.5) + # reference for post-treatment
-      geom_linerange(color = "navyblue", alpha = 0.75) + # shaded area for 95% CIs
+      geom_linerange(color = "navyblue", alpha = 0.75,size = 2) + # shaded area for 95% CIs
       geom_point( color = "navyblue",size = size) +
       theme_bw() +
       xlab("Periods relative to Treatment") +
