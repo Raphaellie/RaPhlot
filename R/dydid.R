@@ -132,7 +132,7 @@ dydid <- function(data = df, dv = "y",
   did.plot <- function(results) {
     did_plot <- ggplot(data = results, aes(x = time, y = coef, ymax = ciup, ymin = cilow)) +
       geom_hline(yintercept = 0, linetype = 2, size = 0.6, alpha = 0.5) + # reference for effect
-      geom_vline(xintercept = -1, linetype = 2, size = 0.6, alpha = 0.5) + # reference for post-treatment
+      geom_vline(xintercept = -1, linetype = 3, size = 0.6, alpha = 0.85) + # reference for post-treatment
       geom_ribbon(fill = "deepskyblue3", alpha = 0.15) + # shaded area for 95% CIs
       geom_line(color = "navyblue", linetype = linetype, alpha = 0.75) + # line and points for coefficients
       geom_point( color = "navyblue",size = size) +
@@ -151,7 +151,7 @@ dydid <- function(data = df, dv = "y",
   did.plot2 <- function(results) {
     did_plot <- ggplot(data = results, aes(x = time, y = coef, ymax = ciup, ymin = cilow)) +
       geom_hline(yintercept = 0, linetype = 2, size = 0.6, alpha = 0.5) + # reference for effect
-      geom_vline(xintercept = -1, linetype = 2, size = 0.6, alpha = 0.5) + # reference for post-treatment
+      geom_vline(xintercept = -1, linetype = 'dotted', size = 0.6, alpha = 0.85) + # reference for post-treatment
       geom_linerange(color = "navyblue", alpha = 0.75,size = 0.6) + # shaded area for 95% CIs
       geom_point( color = "navyblue",size = size) +
       theme_bw() +
