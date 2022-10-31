@@ -4,7 +4,7 @@
 #' @param data a data set object
 #' @param y  the outcome variable of your interest
 #' @param x the explaining variable of your interest, should be available across several time periods
-#' @param tid ID for each time point
+#' @param time_id ID for each time point
 #' @param years a sequence of perids you want to take into account; all years in your data by default.
 #' @param covar control variables to be included
 #'
@@ -20,7 +20,7 @@
 #'
 #' # use the function
 #' anes.dynamic <- dycoef(
-#'   data = anes, dv = "pid7", x = 'ft_black', tid = "year",
+#'   data = anes, dv = "pid7", x = 'ft_black', time_id = "year",
 #'   years = seq(1960,2020,4),
 #'   covar = ('ft_white','as.factor(race)')
 #' )
@@ -37,34 +37,36 @@
 #' @import fastDummies
 #' @import viridisLite
 
+library(tidyverse)
+library(estimatr)
 library(viridisLite)
 
 ## FUNCTION for coefficient trends
 
-dycoef <- function(data,y,x,covar = NULL,tid,
-                   years = seq(min(data[[tid]]),max(data[[tid]]),1),
+dycoef <- function(data,y,x,covar = NULL,time_id,
+                   years = seq(min(data[[time_id]]),max(data[[time_id]]),1),
                    linetype = 6, size = 3){
 
   # check var availability across time ---------------------------------
 
   ## function for checking
-  tcheck <- function(data,var,tid){
+  tcheck <- function(data,var,time_id){
     tcheck <- data %>%
-      group_by(get(tid)) %>%  # Use get(string) in dplyr to refer to the intended var
+      group_by(get(time_id)) %>%  # Use get(string) in dplyr to refer to the intended var
       summarize(dvm = mean(get(var), na.rm = TRUE)) %>%
       filter(is.na(dvm) == FALSE)
-    return(tcheck[['get(tid)']]) # Use data[[string]] to refer to the intended column?
+    return(tcheck[['get(time_id)']]) # Use data[[string]] to refer to the intended column?
   }
 
   ## check for x & y, then get the years that overlap
-  # years <- seq(min(anes[[tid]]),max(anes[[tid]]),1)
+  # years <- seq(min(anes[[time_id]]),max(anes[[time_id]]),1)
   for (var in c(x,y,covar) ){
 
     var <- ifelse(startsWith(var,"as.factor("),
                   sub("\\).*", "", sub( ".*as.factor\\(",'',var)),
                   var)
 
-    yearsvar <- tcheck(data = data, var = var, tid = tid)
+    yearsvar <- tcheck(data = data, var = var, time_id = time_id)
 
     years <- intersect(years, yearsvar)
   }
@@ -84,7 +86,7 @@ dycoef <- function(data,y,x,covar = NULL,tid,
   stats <- data.frame()
 
   for (i in years) {
-    data.reg <-data %>% filter(get(tid) == i)
+    data.reg <-data %>% filter(get(time_id) == i)
     reg <-
       lm_robust(model, data = data.reg) %>%
       tidy %>%
