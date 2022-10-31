@@ -1,10 +1,8 @@
-#' @title
-#' Sequential Display of Coefficient Estimates
+#' @title Sequential Display of Coefficient Estimates
 #'
-#' @description
-#' Running one regresison model over multiple subsamples by time periods, get the resuls, and plot coefficients over time.
+#' @description Running one regresison model over multiple subsamples by time periods, get the resuls, and plot coefficients over time.
 #'
-#' @param data a data set object
+#' @param data a data.frame object
 #' @param y  the outcome variable of your interest
 #' @param x the explaining variable of your interest, should be available across several time periods
 #' @param time_id ID for each time point
@@ -14,7 +12,7 @@
 #' @return
 #' This functions return the following three objects:
 #' A. "lastreg": regression results of you model in the subsample of last time period
-#' B. "results": A data frame reporting coefficients and 95% CIs for all regressions.
+#' B. "results": A data frame reporting coefficients and 95\% CIs for all regressions.
 #' C. "plot": A dynamic plot of x coefficients across periods using ggplot2().
 #' @examples
 #'

@@ -2,34 +2,36 @@
 % Please edit documentation in R/dycoef.R
 \name{dycoef}
 \alias{dycoef}
-\title{dycoef}
+\title{Sequential Display of Coefficient Estimates}
 \usage{
 dycoef(
   data,
-  dv = "pid7",
-  x = "ft_black",
+  y,
+  x,
   covar = NULL,
-  tid,
-  years = seq(min(data[[tid]]), max(data[[tid]]), 1)
+  time_id,
+  years = seq(min(data[[time_id]]), max(data[[time_id]]), 1),
+  linetype = 6,
+  size = 3
 )
 }
 \arguments{
-\item{data}{a data set object}
+\item{data}{a data.frame object}
 
-\item{dv}{the outcome variable of your interest}
+\item{y}{the outcome variable of your interest}
 
 \item{x}{the explaining variable of your interest, should be available across several time periods}
 
 \item{covar}{control variables to be included}
 
-\item{tid}{ID for each time point}
+\item{time_id}{ID for each time point}
 
-\item{years}{a sequence of perids you want to take into account; all years in your data by default.}
+\item{years}{a sequence of periods you want to take into account; all years in your data by default.}
 }
 \value{
 This functions return the following three objects:
 A. "lastreg": regression results of you model in the subsample of last time period
-B. "results": A data frame reporting coefficients and 95% CIs for all regressions.
+B. "results": A data frame reporting coefficients and 95\% CIs for all regressions.
 C. "plot": A dynamic plot of x coefficients across periods using ggplot2().
 }
 \description{
@@ -42,7 +44,7 @@ anes <- read.dta13("data/ANES cleaned.dta")
 
 # use the function
 anes.dynamic <- dycoef(
-  data = anes, dv = "pid7", x = 'ft_black', tid = "year",
+  data = anes, dv = "pid7", x = 'ft_black', time_id = "year",
   years = seq(1960,2020,4),
   covar = ('ft_white','as.factor(race)')
 )

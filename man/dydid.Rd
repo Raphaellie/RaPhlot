@@ -12,7 +12,10 @@ dydid(
   eid = "state_id",
   tid = "year_id",
   span = c(-5, 5),
-  covar = NULL
+  covar = NULL,
+  linetype = 5,
+  size = 2.7,
+  fe2 = NULL
 )
 }
 \arguments{
