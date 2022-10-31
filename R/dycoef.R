@@ -1,11 +1,12 @@
-#' @title dycoef
+#' @title Sequential Display of Coefficient Estimates
 #'
 #' @description Running one regresison model over multiple subsamples by time periods, get the resuls, and plot coefficients over time.
+#'
 #' @param data a data set object
 #' @param y  the outcome variable of your interest
 #' @param x the explaining variable of your interest, should be available across several time periods
 #' @param time_id ID for each time point
-#' @param years a sequence of perids you want to take into account; all years in your data by default.
+#' @param years a sequence of periods you want to take into account; all years in your data by default.
 #' @param covar control variables to be included
 #'
 #' @return
@@ -36,10 +37,6 @@
 #' @import estimatr
 #' @import fastDummies
 #' @import viridisLite
-
-library(tidyverse)
-library(estimatr)
-library(viridisLite)
 
 ## FUNCTION for coefficient trends
 
