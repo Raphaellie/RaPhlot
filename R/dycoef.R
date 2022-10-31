@@ -35,7 +35,9 @@
 #' @import tidyverse
 #' @import estimatr
 #' @import fastDummies
+#' @import viridisLite
 
+library(viridisLite)
 
 ## FUNCTION for coefficient trends
 dycoef <- function(data,y,x,covar = NULL,tid,
@@ -92,23 +94,23 @@ dycoef <- function(data,y,x,covar = NULL,tid,
 
   # plot and return --------------------------------------------------------------------
 
-  plot.ribbon <- function(results) {
-    plot <- ggplot(data = results, aes(x = time, y = estimate, ymax = conf.high, ymin = conf.low)) +
-      # geom_vline(xintercept = 2000,linetype = 2, size = 0.6, alpha = 0.5) +  # reference for any year
-      geom_hline(yintercept = 0,linetype = 2, size = 0.6, alpha = 0.5) +  # reference for effect
-      geom_ribbon(linetype = 2, fill = 'deepskyblue4' , alpha = 0.15) + # shaded area for 95% CIs
-      geom_line(color = 'navyblue', linetype = linetype, alpha = 0.85) + # line and points for coefficients
-      geom_point(color = 'navyblue', size = size) +
-      theme_bw() +
-      xlab('Year of Survey') +
-      ylab('Point Estimate with 95% CIs') +
-      scale_x_continuous(breaks = years) +
-      theme(plot.title = element_text(face = 'bold',size = 12),
-            legend.position = 'none',
-            panel.grid.minor.x = element_blank(),
-            axis.text = element_text(color = 'black'))
-
-    return(plot)
+  # plot.ribbon <- function(results) {
+  #   plot <- ggplot(data = results, aes(x = time, y = estimate, ymax = conf.high, ymin = conf.low)) +
+  #     # geom_vline(xintercept = 2000,linetype = 2, size = 0.6, alpha = 0.5) +  # reference for any year
+  #     geom_hline(yintercept = 0,linetype = 2, size = 0.6, alpha = 0.5) +  # reference for effect
+  #     geom_ribbon(linetype = 2, fill = 'deepskyblue4' , alpha = 0.15) + # shaded area for 95% CIs
+  #     geom_line(color = 'navyblue', linetype = linetype, alpha = 0.85) + # line and points for coefficients
+  #     geom_point(color = 'navyblue', size = size) +
+  #     theme_bw() +
+  #     xlab('Year of Survey') +
+  #     ylab('Point Estimate with 95% CIs') +
+  #     scale_x_continuous(breaks = years) +
+  #     theme(plot.title = element_text(face = 'bold',size = 12),
+  #           legend.position = 'none',
+  #           panel.grid.minor.x = element_blank(),
+  #           axis.text = element_text(color = 'black'))
+  #
+  #   return(plot)
   }
 
   plot.range <- function(results) {
@@ -116,7 +118,8 @@ dycoef <- function(data,y,x,covar = NULL,tid,
       # reference for effect
       geom_hline(yintercept = 0,linetype = 2, size = 0.6, alpha = 0.5) +
       # line range for each year
-      geom_pointrange(color = 'navyblue') + # shaded area for 95% CIs
+      geom_pointrange(aes(color = p.value < 0.05)) + # shaded area for 95% CIs
+      scale_color_viridis_d(end = 0.6) +
       theme_bw() +
       xlab('Year of Survey') +
       scale_x_continuous(breaks = years) +
