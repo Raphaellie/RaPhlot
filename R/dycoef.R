@@ -1,6 +1,8 @@
-#' @title Sequential Display of Coefficient Estimates
+#' @title
+#' Sequential Display of Coefficient Estimates
 #'
-#' @description Running one regresison model over multiple subsamples by time periods, get the resuls, and plot coefficients over time.
+#' @description
+#' Running one regresison model over multiple subsamples by time periods, get the resuls, and plot coefficients over time.
 #'
 #' @param data a data set object
 #' @param y  the outcome variable of your interest
