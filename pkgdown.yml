@@ -3,7 +3,7 @@ pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   RaPhlot-Vignette: RaPhlot-Vignette.html
-last_built: 2022-10-31T08:12Z
+last_built: 2022-10-31T08:14Z
 urls:
   reference: https://raphaellie.github.io/RaPhlot/reference
   article: https://raphaellie.github.io/RaPhlot/articles
