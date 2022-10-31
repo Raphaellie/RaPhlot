@@ -85,7 +85,7 @@ dycoef <- function(data,y,x,covar = NULL,tid,
       tidy %>%
       mutate(time = i) %>%
       filter(term == x)
-    stats <- rbind(reg)
+    stats <- rbind(stats,reg)
     print(paste(i, '-- Regression Done'))
   }
 
