@@ -84,7 +84,7 @@ dycoef <- function(data,y,x,covar = NULL,tid,
       lm_robust(model, data = data.reg) %>%
       tidy %>%
       mutate(time = i) %>%
-      filter(term == 'x')
+      filter(term == x)
     stats <- rbind(reg)
     print(paste(i, '-- Regression Done'))
   }
