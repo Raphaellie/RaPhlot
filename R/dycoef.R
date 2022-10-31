@@ -2,7 +2,7 @@
 #'
 #' @description Running one regresison model over multiple subsamples by time periods, get the resuls, and plot coefficients over time.
 #' @param data a data set object
-#' @param dv  the outcome variable of your interest
+#' @param y  the outcome variable of your interest
 #' @param x the explaining variable of your interest, should be available across several time periods
 #' @param tid ID for each time point
 #' @param years a sequence of perids you want to take into account; all years in your data by default.
@@ -33,12 +33,12 @@
 #'
 #' @export
 #' @import tidyverse
-#' @import lfe
+#' @import estimatr
 #' @import fastDummies
 
 
 ## FUNCTION for coefficient trends
-dycoef <- function(data,dv = 'pid7',x = 'ft_black',covar = NULL,tid,
+dycoef <- function(data,y,x,covar = NULL,tid,
                    years = seq(min(data[[tid]]),max(data[[tid]]),1),
                    linetype = 6, size = 3){
 
@@ -55,7 +55,7 @@ dycoef <- function(data,dv = 'pid7',x = 'ft_black',covar = NULL,tid,
 
   ## check for x & y, then get the years that overlap
   # years <- seq(min(anes[[tid]]),max(anes[[tid]]),1)
-  for (var in c(x,dv,covar) ){
+  for (var in c(x,y,covar) ){
     var <- ifelse(startsWith(var,"as.factor("),
                   sub("\\).*", "", sub( ".*as.factor\\(",'',var)),
                   var)
@@ -73,32 +73,28 @@ dycoef <- function(data,dv = 'pid7',x = 'ft_black',covar = NULL,tid,
 
   # set model and run regressions ---------------------------------------------------
   covar <- ifelse(is.null(covar), " ", paste("+", paste(covar, collapse = " + ")))
-  model <- as.formula( paste(dv,'~',x,covar,'|0|0|0') )
-  print(model)
-
-  ## set a extraction function
-  get.stats <- function(position, var, reg, time = NA) {
-    stats <- data.frame(var = var,
-                        coef = reg$coefficients[position],
-                        se = reg$se[position], time = time)
-    stats <- stats %>% mutate(ciup = coef + se * qnorm(.975), cilow = coef - se * qnorm(.975)) # get 95% CIs
-    return(stats)
-  }
+  model <- as.formula( paste(y,'~',x,covar) )
+  print(paste('Model for Each Wave:',model))
 
   stats <- data.frame()
 
   for (i in years) {
-    datareg <-data %>% filter(get(tid) == i)
-    reg <- felm(model, data = datareg)
-    stats <- rbind(stats,get.stats(2,x,reg,i))
+    data.reg <-data %>% filter(get(tid) == i)
+    reg <-
+      lm_robust(model, data = data.reg) %>%
+      tidy %>%
+      mutate(time = i) %>%
+      filter(term == 'x')
+    stats <- rbind(reg)
     print(paste(i, '-- Regression Done'))
   }
 
 
   # plot and return --------------------------------------------------------------------
 
-  dycoef.ribbon <- function(results) {
-    plot <- ggplot(data = results, aes(x = time, y = coef, ymax = ciup, ymin = cilow)) + # geom_vline(xintercept = 2000,linetype = 2, size = 0.6, alpha = 0.5) +  # reference for any year
+  plot.ribbon <- function(results) {
+    plot <- ggplot(data = results, aes(x = time, y = estimate, ymax = conf.high, ymin = conf.low)) +
+      # geom_vline(xintercept = 2000,linetype = 2, size = 0.6, alpha = 0.5) +  # reference for any year
       geom_hline(yintercept = 0,linetype = 2, size = 0.6, alpha = 0.5) +  # reference for effect
       geom_ribbon(linetype = 2, fill = 'deepskyblue4' , alpha = 0.15) + # shaded area for 95% CIs
       geom_line(color = 'navyblue', linetype = linetype, alpha = 0.85) + # line and points for coefficients
@@ -115,12 +111,15 @@ dycoef <- function(data,dv = 'pid7',x = 'ft_black',covar = NULL,tid,
     return(plot)
   }
 
-  dycoef.lrange <- function(results) {
-    plot <- ggplot(data = results, aes(x = time, y = coef, ymax = ciup, ymin = cilow)) + # geom_vline(xintercept = 2000,linetype = 2, size = 0.6, alpha = 0.5) +  # reference for any year
-      geom_hline(yintercept = 0,linetype = 2, size = 0.6, alpha = 0.5) +  # reference for effect
-      geom_pointrange(color = 'slategray4', alpha = 0.90) + # shaded area for 95% CIs
+  plot.range <- function(results) {
+    plot <- ggplot(data = results, aes(x = time, y = estimate, ymax = conf.high, ymin = conf.low)) +
+      # reference for effect
+      geom_hline(yintercept = 0,linetype = 2, size = 0.6, alpha = 0.5) +
+      # line range for each year
+      geom_pointrange(color = 'navyblue') + # shaded area for 95% CIs
       theme_bw() +
       xlab('Year of Survey') +
+      scale_x_continuous(breaks = years) +
       ylab('Point Estimate with 95% CIs') +
       theme(plot.title = element_text(face = 'bold',size = 12),
             legend.position = 'none',
@@ -129,5 +128,5 @@ dycoef <- function(data,dv = 'pid7',x = 'ft_black',covar = NULL,tid,
     return(plot)
   }
 
-  return(list('plot' = dycoef.lrange(stats), 'results' = stats,'lastreg' = summary(reg)))
+  return(list('plot' = plot.range(stats), 'results' = stats,'lat' = reg))
 }
