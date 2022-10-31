@@ -111,7 +111,7 @@ dycoef <- function(data,y,x,covar = NULL,tid,
   #           axis.text = element_text(color = 'black'))
   #
   #   return(plot)
-  }
+  # }
 
   plot.range <- function(results) {
     plot <- ggplot(data = results, aes(x = time, y = estimate, ymax = conf.high, ymin = conf.low)) +
