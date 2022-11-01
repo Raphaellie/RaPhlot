@@ -31,7 +31,7 @@ results <-
 
 plot <-
   results %>%
-  ggplot(aes(x = time, y = estimate, ymin = conf.low, ymax = conf.high, color = get(group))) +
+  ggplot(aes(x = time, y = estimate, ymin = conf.low, ymax = conf.high, color = group)) +
   geom_pointrange(position = position_dodge(width = 2)) +
   scale_x_continuous(breaks = breaks) +
   scale_color_brewer(palette = 'Set1') +
