@@ -18,20 +18,22 @@ results <-
   data %>%
   mutate(time = get(time_id),
          var2 = get(var),
-         group = ifelse(is.na(group),'All',get(group))) %>%
+         group2 = ifelse(is.na(group),'All',get(group))) %>%
   filter(time %in% breaks) %>%
-  group_by(time, group) %>%
+  group_by(time, group2) %>%
   summarise(estimate = mean(var2,na.rm = T),
             sd = sd(var2,na.rm = T),
             n = sum(!is.na(var2)),
             std.err = sd/sqrt(n),
             conf.high = estimate + qnorm(0.975)*std.err,
-            conf.low  = estimate - qnorm(0.975)*std.err ) %>%
-  filter(!is.na(estimate),!is.na(group))
+            conf.low  = estimate - qnorm(0.975)*std.err )
+# %>%
+#   filter(!is.na(estimate),!is.na(group2))
 
 plot <-
   results %>%
-  ggplot(aes(x = time, y = estimate, ymin = conf.low, ymax = conf.high, color = group)) +
+  ggplot(aes(x = time, y = estimate, ymin = conf.low, ymax = conf.high,
+             color = group2)) +
   geom_pointrange(position = position_dodge(width = 2)) +
   scale_x_continuous(breaks = breaks) +
   scale_color_brewer(palette = 'Set1') +
