@@ -11,8 +11,9 @@
 #' @import viridisLite
 
 
-dyvar <- function(data,var,time_id,group = time_id, breaks = seq(1952,2020,4) ){
+dyvar <- function(data,var,time_id,group = NULL, breaks = seq(1952,2020,4) ){
 
+group <- ifelse(is.null(group), time_id, group)
 
 results <-
   data %>%
