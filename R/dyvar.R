@@ -11,9 +11,9 @@
 #' @import viridisLite
 
 
-dyvar <- function(data,var,time_id,group = time_id, breaks = seq(1952,2020,4) ){
+dyvar <- function(data,var,time_id,group = NULL, breaks = seq(1952,2020,4) ){
 
-group <-ifelse(is.na(NA),'All',parse_expr('race'))
+group <-ifelse(is.null(group),'All',parse_expr('race'))
 
 
 results <-
