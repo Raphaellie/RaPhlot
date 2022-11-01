@@ -13,27 +13,24 @@
 
 dyvar <- function(data,var,time_id,group = NULL, breaks = seq(1952,2020,4) ){
 
-group <- ifelse(is.null(group), time_id, group)
 
 results <-
   data %>%
   mutate(time = get(time_id),
-         var2 = get(var),
-         group = get(group) ) %>%
+         var2 = get(var) ) %>%
   filter(time %in% breaks) %>%
-  group_by(time, group) %>%
+  group_by(time) %>%
   summarise(estimate = mean(var2,na.rm = T),
             sd = sd(var2,na.rm = T),
             n = sum(!is.na(var2)),
             std.err = sd/sqrt(n),
             conf.high = estimate + qnorm(0.975)*std.err,
             conf.low  = estimate - qnorm(0.975)*std.err ) %>%
-  filter(!is.na(estimate),!is.na(group))
+  filter(!is.na(estimate))
 
 plot <-
   results %>%
-  ggplot(aes(x = time, y = estimate, ymin = conf.low, ymax = conf.high,
-             color = group)) +
+  ggplot(aes(x = time, y = estimate, ymin = conf.low, ymax = conf.high)) +
   geom_pointrange(position = position_dodge(width = 2)) +
   scale_x_continuous(breaks = breaks) +
   scale_color_brewer(palette = 'Set1') +
