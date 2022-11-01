@@ -11,14 +11,16 @@
 #' @import viridisLite
 
 
-dyvar <- function(data,var,time_id,group = NULL, breaks = seq(1952,2020,4) ){
+dyvar <- function(data,var,time_id,group = NA, breaks = seq(1952,2020,4) ){
 
 
 results <-
   data %>%
-  mutate(time = get(time_id), var2 = get(var)) %>%
+  mutate(time = get(time_id),
+         var2 = get(var),
+         group = ifelse(is.na(group),'All',get(group))) %>%
   filter(time %in% breaks) %>%
-  group_by(time, get(group)) %>%
+  group_by(time, group) %>%
   summarise(estimate = mean(var2,na.rm = T),
             sd = sd(var2,na.rm = T),
             n = sum(!is.na(var2)),
