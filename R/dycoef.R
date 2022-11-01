@@ -1,4 +1,4 @@
-#' @title Sequential Display of Coefficient Estimates
+#' @title Dynamic Display of Coefficient Estimates
 #'
 #' @description Running one regresison model over multiple subsamples by time periods, get the resuls, and plot coefficients over time.
 #'
@@ -40,9 +40,9 @@
 
 ## FUNCTION for coefficient trends
 
-dycoef <- function(data,y,x,covar = NULL,time_id,
-                   years = seq(min(data[[time_id]]),max(data[[time_id]]),1),
-                   linetype = 6, size = 3){
+dycoef <- function(data,y,x,time_id,
+                   covar = NULL,
+                   years = seq(1952,2020,4) ){
 
   # check var availability across time ---------------------------------
 
