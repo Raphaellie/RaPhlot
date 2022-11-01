@@ -16,9 +16,9 @@ dyvar <- function(data,var,time_id, years = seq(1952,2020,4) ){
 
 results <-
   data %>%
-  filter(get(time_id) %in% years) %>%
-  mutate(time = get(time_id), var2 = get(var))
-  group_by(get(time_id)) %>%
+  mutate(time = get(time_id), var2 = get(var)) %>%
+  filter(time %in% years) %>%
+  group_by(time) %>%
   summarise(estimate = mean(var2,na.rm = T),
             sd = sd(var2,na.rm = T),
             n = sum(!is.na(var2)),
