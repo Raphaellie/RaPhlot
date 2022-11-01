@@ -27,7 +27,7 @@ results <-
             std.err = sd/sqrt(n),
             conf.high = estimate + qnorm(0.975)*std.err,
             conf.low  = estimate - qnorm(0.975)*std.err ) %>%
-  filter(!is.na(estimate),!is.na(get(group)))
+  filter(!is.na(estimate),!is.na(group))
 
 plot <-
   results %>%
